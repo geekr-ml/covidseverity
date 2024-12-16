@@ -52,7 +52,6 @@ pyaml==24.7.0
 pydantic==2.8.2
 pydantic_core==2.20.1
 PyQt5==5.15.10
-PyWavelets==1.6.0
 pywin32==305.1
 rich==13.7.1
 scikit-image==0.24.0
@@ -65,10 +64,6 @@ SQLAlchemy==2.0.31
 statsmodels==0.14.2
 stopit==1.1.2
 tenacity==8.5.0
-tensorboard==2.17.0
-tensorboard-data-server==0.7.2
-tensorflow==2.17.0
-tensorflow-intel==2.17.0
 termcolor==2.4.0
 tifffile==2024.8.10
 TPOT==0.12.2
@@ -76,9 +71,6 @@ tqdm==4.66.4
 typeguard==4.3.0
 update-checker==0.18.0
 visions==0.7.6
-Werkzeug==3.0.3
-wheel==0.43.0
-wordcloud==1.9.3
 wrapt==1.16.0
 xgboost==2.1.0
 ydata-profiling==4.8.3
