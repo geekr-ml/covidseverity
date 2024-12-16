@@ -1,0 +1,2 @@
+# covidseverity
+to be deleted
