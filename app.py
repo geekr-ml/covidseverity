@@ -1,16 +1,27 @@
+from flask import Flask
+import pickle
+import numpy as np
+
 from flask import Blueprint, render_template, request
-from .model import load_model, make_prediction
 
-main = Blueprint("main", __name__)
+model_path = "best_model.pkl"
 
-# Load the ML model
-model = load_model()
+with open(model_path, "rb") as f:
+        model = pickle.load(f)
 
-@main.route("/")
+app = Flask(__name__)
+
+
+def make_prediction(model, features):
+    features = np.array([features])
+    prediction = model.predict(features)[0]
+    return prediction
+
+@app.route("/")
 def index():
     return render_template("index.html")
 
-@main.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["POST"])
 def predict():
     try:
         form_data = request.form
