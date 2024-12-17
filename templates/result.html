@@ -3,47 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prediction Result</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Roboto', sans-serif;
-        }
-        .container {
-            max-width: 600px;
-            margin-top: 50px;
-        }
-        .btn-primary {
-            background-color: #0d58a9;
-            border-color: #0d58a9;
-        }
-        .btn-primary:hover {
-            background-color: #0c6ed8;
-        }
-        .result-card {
-            padding: 30px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .text-primary{
-            font-size: 180%;
-            font-weight:600;
-        }
-    </style>
+    <title>COVID Severity Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <div class="card result-card">
-            <h1 class="text-center text-primary">TB Treatment Outcome</h1>
-            <p class="lead text-center">
-                Predicted Status: <strong><b>{{ prediction }}</b></strong>
-            </p>
-            <div class="text-center">
-                <br><a href="/" class="btn btn-primary">Go Back</a>
-            </div>
-        </div>
+        <h1>Prediction Result</h1>
+        <p>The predicted COVID severity outcome is: <strong>{{ prediction }}</strong></p>
+        <a href="/">Go Back</a>
     </div>
 </body>
 </html>
