@@ -3,89 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COVID Severity Prediction Result</title>
+    <title>COVID Severity Prediction Report</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        /* General Reset and Font */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
         body {
-            background-color: #f5f7fa; /* Soft background */
+            background-color: #f9f9f9;
+            font-family: 'Arial', sans-serif;
             color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            padding-top: 20px;
         }
-
-        /* Container */
         .container {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
+            max-width: 1200px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .main-heading {
+            text-align: center;
+            font-size: 1.9rem;
+            font-weight: bold;
+            color: #1e5b8e;
+            margin-bottom: 30px;
+        }
+        .card {
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #1e5b8e;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .card-body {
+            background-color: #fff;
+            padding: 20px;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            color: #1e5b8e;
+            margin-bottom: 20px;
+        }
+        .result-item {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .patient-values table th, .patient-values table td {
+            padding: 10px;
+            font-size: 0.9rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .patient-values table th {
+            background-color: #f8f9fa;
+            color: #1e5b8e;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .footer p {
+            margin: 0;
+            color: #666;
+        }
+        .shap-section img {
+            max-width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .shap-section {
             text-align: center;
         }
-
-        h1 {
-            color: #2c3e50;
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
+        .shap-section img {
+            margin-top: 20px;
         }
-
-        p {
+        .result-header {
+            margin-bottom: 20px;
+        }
+        .row {
+            margin-bottom: 20px;
+        }
+        .prediction-probabilities {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .prediction-probabilities div {
             font-size: 1.2rem;
+            font-weight: 500;
             color: #555;
-            margin-bottom: 2rem;
         }
 
-        strong {
-            color: #2980b9;
-        }
-
-        /* Back Link */
-        a {
-            display: inline-block;
-            text-decoration: none;
-            background-color: #2980b9;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
-        }
-
-        a:hover {
-            background-color: #1f618d;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 600px) {
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: #fff;
+                color: #000;
+                -webkit-print-color-adjust: exact; /* Ensure colors are preserved */
+                margin: 0;
+            }
             .container {
-                padding: 1.5rem;
+                max-width: 190mm; /* A4 width */
+                margin: 0 auto;
+                padding: 10mm;
+            }
+            .main-heading {
+                font-size: 1.8rem; /* Adjust for print */
+                margin-bottom: 15px;
+            }
+            .card {
+                box-shadow: none;
+                margin-bottom: 10px;
+            }
+            .shap-section img {
+                max-height: 250px;
+            }
+            .footer {
+                display: none; /* Hide footer on print */
             }
 
-            h1 {
-                font-size: 1.5rem;
+            /* Print Styles */
+            @media print {
+                .no-print {
+                    display: none; /* Hide elements with this class in print view */
+                }
             }
-
-            p {
-                font-size: 1rem;
-            }
+            /* Ensure "Feature Importance" starts on Page 2
+            .feature-importance-section {
+                page-break-before: always;
+            } */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>COVID Severity Prediction Result</h1>
-        <p> <strong>{{ prediction }}</strong></p>
-        <a href="/">Go Back</a>
+        <!-- Page Main Heading -->
+        <div class="main-heading">
+            COVID Severity Prediction Report
+        </div>
+
+        <!-- Prediction Results Card -->
+        <div class="card prediction-result-container">
+            <div class="card-header">
+                Prediction Results: <span style="text-transform: uppercase;">{{ prediction }}</span>
+            </div>
+            <div class="card-body">
+                <div class="section-title">Prediction Confidence</div>
+                <div class="prediction-probabilities">
+                    <div>
+                        <strong>Severe Prediction Probability:</strong> {{ probability_positive }}%
+                    </div>
+                    <div>
+                        <strong>Non-Severe Prediction Probability:</strong> {{ probability_negative }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Data and SHAP Plot -->
+        <div class="card">
+            <div class="card-header">
+                Patient Information 
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Patient Information -->
+                    <div class="col-md-6 patient-values">
+                        <table class="table">
+                            {% for feature, value in entered_values.items() %}
+                            <tr>
+                                <th>{{ feature }}</th>
+                                <td>
+                                    {% if value == 1 or value == '1' %}
+                                        Yes
+                                    {% elif value == 0 or value == '0' %}
+                                        No
+                                    {% else %}
+                                        {{ value }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Go Back and Print Buttons -->
+        <div class="text-center no-print">
+            <a href="/" class="btn btn-primary">Go Back</a>
+            <button class="btn btn-success" onclick="window.print()">Print Report</button>
+        </div>
     </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 COVID Severity Prediction System. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
